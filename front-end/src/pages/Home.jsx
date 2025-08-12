@@ -1,4 +1,6 @@
 import React from "react";
+import api from "../api";
+import { useState, useEffect } from "react";
 
 export default function Home() {
     const [rooms, setRooms] = useState([]);
@@ -19,6 +21,9 @@ export default function Home() {
 
   return (
     <div className="font-sans">
+        {/* {JSON.stringify(rooms)} */}
+        {/* {JSON.stringify(rooms[0].images[0].url)} */}
+
       {/* HERO SECTION */}
       <section
         className="relative h-[70vh] md:h-[80vh] bg-cover bg-center flex items-center justify-center text-white"
@@ -67,7 +72,7 @@ export default function Home() {
       </section>
 
       {/* FEATURED ROOMS */}
-      <section className="py-12 sm:py-16 bg-gray-50">
+      {/* <section className="py-12 sm:py-16 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">
             Our Rooms
@@ -106,6 +111,57 @@ export default function Home() {
               </div>
             ))}
           </div>
+        </div>
+      </section> */}
+
+        {/* Rooms Section */}
+      <section className="py-12 sm:py-16 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">
+            Our Rooms
+          </h2>
+
+          {loading ? (
+            <p className="text-center text-gray-500">Loading rooms...</p>
+          ) : (
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {rooms.map((room) => (
+                <div
+                  key={room.id}
+                  className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col"
+                >
+                  <img
+                    src={
+                    //   room.images?.[0]?.url ||
+                    `http://127.0.0.1:8000/storage/${room.images[0].url}` ||
+                      "https://via.placeholder.com/400x300?text=No+Image"
+                    }
+                    alt={room.title}
+                    className="w-full h-48 sm:h-56 object-cover"
+                  />
+                  <div className="p-4 flex flex-col flex-grow">
+                    <h3 className="text-lg sm:text-xl font-semibold mb-2">
+                      {room.title}
+                    </h3>
+                    <p className="text-gray-600 mb-4 text-sm sm:text-base flex-grow">
+                      {room.description}
+                    </p>
+                    <div className="flex justify-between items-center mt-auto">
+                      <span className="text-yellow-600 font-bold text-sm sm:text-base">
+                        ฿{room.price_per_night}/night
+                      </span>
+                      <a
+                        href={`/rooms/${room.id}`}
+                        className="text-yellow-500 hover:underline text-sm"
+                      >
+                        View Details
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
