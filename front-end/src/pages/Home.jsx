@@ -1,6 +1,22 @@
 import React from "react";
 
 export default function Home() {
+    const [rooms, setRooms] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        api.get("/rooms")
+        .then((response) => {
+        setRooms(response.data);
+        setLoading(false);
+        })
+        .catch((error) => {
+        console.error("Error fetching rooms:", error);
+        setLoading(false);
+        });
+    }, []);
+
+
   return (
     <div className="font-sans">
       {/* HERO SECTION */}

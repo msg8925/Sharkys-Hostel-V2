@@ -21,8 +21,9 @@ class RoomImage extends Model
         return $this->belongsTo(Room::class);
     }
 
-    public function getUrlAttribute()
-    {
-        return asset('storage/' . $this->path);
-    }
+    // I am not sure how this works?
+    // public function getUrlAttribute()
+    // {
+    //     return asset('storage/' . $this->path);
+    // }
 }
