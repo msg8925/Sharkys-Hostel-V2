@@ -1,6 +1,8 @@
 import React from "react";
 import api from "../api";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+
 
 export default function Home() {
     const [rooms, setRooms] = useState([]);
@@ -21,7 +23,7 @@ export default function Home() {
 
   return (
     <div className="font-sans">
-        {/* {JSON.stringify(rooms)} */}
+        {/* {JSON.stringify(rooms[0].images[0].url)} */}
         {/* {JSON.stringify(rooms[0].images[0].url)} */}
 
       {/* HERO SECTION */}
@@ -50,26 +52,34 @@ export default function Home() {
       </section>
 
       {/* ABOUT SECTION */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-8 items-center">
-        <div>
-          <h2 className="text-2xl sm:text-3xl font-bold mb-4">About Us</h2>
-          <p className="text-gray-700 mb-4 text-sm sm:text-base">
-            SunnyStay Hostel is a cozy and affordable place for travelers,
-            backpackers, and digital nomads. Located just minutes away from the
-            city’s main attractions, we offer comfortable beds, a friendly
-            atmosphere, and unforgettable experiences.
-          </p>
-          <p className="text-gray-700 text-sm sm:text-base">
-            Whether you’re here for adventure, work, or relaxation, our team is
-            here to make you feel right at home.
-          </p>
-        </div>
-        <img
-          src="https://images.unsplash.com/photo-1590490359854-dfba19688d69"
-          alt="Hostel interior"
-          className="rounded-lg shadow-lg w-full h-64 sm:h-80 object-cover"
-        />
-      </section>
+        {loading ? (
+            <p className="text-center text-gray-500">Loading rooms...</p>
+        ) : (
+            <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                <h2 className="text-2xl sm:text-3xl font-bold mb-4">About Us</h2>
+                <p className="text-gray-700 mb-4 text-sm sm:text-base">
+                    SunnyStay Hostel is a cozy and affordable place for travelers,
+                    backpackers, and digital nomads. Located just minutes away from the
+                    city’s main attractions, we offer comfortable beds, a friendly
+                    atmosphere, and unforgettable experiences.
+                </p>
+                <p className="text-gray-700 text-sm sm:text-base">
+                    Whether you’re here for adventure, work, or relaxation, our team is
+                    here to make you feel right at home.
+                </p>
+                </div>
+                <img
+                src={
+                    // `http://127.0.0.1:8000/storage/${rooms[0].images[0].url}` ||
+                    `http://127.0.0.1:8000/storage/room_images/exterior.jpg` ||
+                    "https://images.unsplash.com/photo-1590490359854-dfba19688d69"
+                }
+                alt="Hostel interior"
+                className="rounded-lg shadow-lg w-full h-64 sm:h-80 object-cover"
+                />
+            </section>
+        )}
 
       {/* FEATURED ROOMS */}
       {/* <section className="py-12 sm:py-16 bg-gray-50">
@@ -150,12 +160,16 @@ export default function Home() {
                       <span className="text-yellow-600 font-bold text-sm sm:text-base">
                         ฿{room.price_per_night}/night
                       </span>
-                      <a
+                      {/* Inside your map for rooms */}
+                      <Link to={`/rooms/${room.id}`} className="text-blue-600 underline">
+                        View Details
+                      </Link>
+                      {/* <a
                         href={`/rooms/${room.id}`}
                         className="text-yellow-500 hover:underline text-sm"
                       >
                         View Details
-                      </a>
+                      </a> */}
                     </div>
                   </div>
                 </div>

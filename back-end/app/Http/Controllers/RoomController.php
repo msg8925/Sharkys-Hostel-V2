@@ -15,4 +15,11 @@ class RoomController extends Controller
         $rooms = Room::with('images')->get();
         return response()->json($rooms);
     }
+
+
+    public function show($id)
+    {
+        $room = Room::with('images')->findOrFail($id);
+        return response()->json($room);
+    }
 }
