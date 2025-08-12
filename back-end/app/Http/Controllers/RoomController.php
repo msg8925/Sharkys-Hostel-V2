@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Room;
 use Illuminate\Http\Request;
 
 class RoomController extends Controller
@@ -11,6 +12,7 @@ class RoomController extends Controller
     {
         // return Room::with('images')->take(3)->get(); // limit to 3 for homepage
 
-        return "Images of rooms.";
+        $rooms = Room::with('images')->get();
+        return response()->json($rooms);
     }
 }
