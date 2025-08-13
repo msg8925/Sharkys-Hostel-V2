@@ -3,6 +3,7 @@ import api from "../api";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+// http://127.0.0.1:8000/storage/room_images/dorm1.jpg
 
 export default function Home() {
     const [rooms, setRooms] = useState([]);
