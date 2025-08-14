@@ -6,20 +6,37 @@ import { Link } from "react-router-dom";
 // http://127.0.0.1:8000/storage/room_images/dorm1.jpg
 
 export default function Home() {
+    const [content, setContent] = useState({});
     const [rooms, setRooms] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        api.get("/rooms")
-        .then((response) => {
-        setRooms(response.data);
-        setLoading(false);
-        })
-        .catch((error) => {
-        console.error("Error fetching rooms:", error);
-        setLoading(false);
-        });
-    }, []);
+    // useEffect(() => {
+    //     api.get("/rooms")
+    //     .then((response) => {
+    //     setRooms(response.data);
+    //     setLoading(false);
+    //     })
+    //     .catch((error) => {
+    //     console.error("Error fetching rooms:", error);
+    //     setLoading(false);
+    //     });
+    // }, []);
+
+  useEffect(() => {
+    Promise.all([
+      api.get("/rooms"),
+      api.get("/page-content?lang=en")
+    ])
+    .then(([roomsRes, contentRes]) => {
+      setRooms(roomsRes.data);
+      setContent(contentRes.data);
+      setLoading(false);
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+    });
+  }, []);
 
 
   return (
@@ -37,11 +54,19 @@ export default function Home() {
       >
         <div className="bg-black/50 absolute inset-0"></div>
         <div className="relative z-10 text-center px-4 max-w-2xl">
+
           <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-4 leading-tight">
-            Welcome to SunnyStay Hostel
+            {content["home.hero.title"]}
           </h1>
-          <p className="text-base sm:text-lg md:text-xl mb-6">
+          {/* <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-4 leading-tight">
+            Welcome to SunnyStay Hostel
+          </h1> */}
+
+          {/* <p className="text-base sm:text-lg md:text-xl mb-6">
             Your home away from home in the heart of the city.
+          </p> */}
+          <p className="text-base sm:text-lg md:text-xl mb-6">
+            {content["home.hero.subtitle"]}
           </p>
           <a
             href="/rooms"
@@ -58,13 +83,21 @@ export default function Home() {
         ) : (
             <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-8 items-center">
                 <div>
-                <h2 className="text-2xl sm:text-3xl font-bold mb-4">About Us</h2>
-                <p className="text-gray-700 mb-4 text-sm sm:text-base">
+                {/* <h2 className="text-2xl sm:text-3xl font-bold mb-4">About Us</h2> */}
+                <h2 className="text-2xl sm:text-3xl font-bold mb-4">
+                  {content["home.about.title"]}
+                </h2>
+                
+                {/* <p className="text-gray-700 mb-4 text-sm sm:text-base">
                     SunnyStay Hostel is a cozy and affordable place for travelers,
                     backpackers, and digital nomads. Located just minutes away from the
                     city’s main attractions, we offer comfortable beds, a friendly
                     atmosphere, and unforgettable experiences.
+                </p> */}
+                <p className="text-gray-700 mb-4 text-sm sm:text-base">
+                  {content["home.about.body"]}
                 </p>
+
                 <p className="text-gray-700 text-sm sm:text-base">
                     Whether you’re here for adventure, work, or relaxation, our team is
                     here to make you feel right at home.
@@ -203,11 +236,19 @@ export default function Home() {
       {/* LOCATION */}
       <section className="py-12 sm:py-16 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-4">Our Location</h2>
-          <p className="text-gray-700 mb-6 text-sm sm:text-base">
+          {/* <h2 className="text-2xl sm:text-3xl font-bold mb-4">Our Location</h2> */}
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">
+            {content["home.location.title"]}
+          </h2>
+          
+          {/* <p className="text-gray-700 mb-6 text-sm sm:text-base">
             Located just 5 minutes from the main bus station and close to
             popular attractions, restaurants, and nightlife.
+          </p> */}
+          <p className="text-gray-700 mb-6 text-sm sm:text-base">
+            {content["home.location.body"]}
           </p>
+
           <img
             src="https://source.unsplash.com/800x400/?map"
             alt="Map location"
