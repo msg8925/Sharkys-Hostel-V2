@@ -43,7 +43,7 @@ export default function Navbar() {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-6">
-          {["home", "about", "rooms", "contact"].map((item) => (
+          {["home", "about", "rooms", "contact", "gallery"].map((item) => (
             <button
               key={item}
               onClick={() => scrollToSection(item)}
@@ -97,7 +97,7 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-white shadow-lg p-4 space-y-4">
-          {["home", "about", "rooms", "contact"].map((item) => (
+          {["home", "about", "rooms", "contact", "gallery"].map((item) => (
             <button
               key={item}
               onClick={() => scrollToSection(item)}

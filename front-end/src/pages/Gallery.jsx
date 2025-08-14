@@ -1,57 +1,64 @@
 import React, { useState } from "react";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
-import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
-import "yet-another-react-lightbox/plugins/thumbnails.css";
+import { useInView } from "react-intersection-observer";
+// import ProgressiveImage from "./ProgressiveImage";
+import ProgressiveImage from "../components/ProgressiveImage";
 
-const Gallery = () => {
-  const [open, setOpen] = useState(false);
-  const [index, setIndex] = useState(0);
+// http://127.0.0.1:8000/storage/room_images/exterior.jpg
 
-  // All hostel photos (replace with your actual image URLs)
-  const images = [
-    { src: "/images/room1.jpg", alt: "Cozy private room" },
-    { src: "/images/room2.jpg", alt: "Shared dormitory" },
-    { src: "/images/lobby.jpg", alt: "Spacious lobby" },
-    { src: "/images/kitchen.jpg", alt: "Guest kitchen" },
-    { src: "/images/outdoor.jpg", alt: "Outdoor seating" },
-  ];
+const images = [
+    {
+        src: "http://127.0.0.1:8000/storage/room_images/exterior.jpg",
+        placeholder: "/images/room1-small.jpg",
+        alt: "Room 1"
+    },
+    {
+        src: "http://127.0.0.1:8000/storage/room_images/exterior.jpg",
+        placeholder: "/images/room2-small.jpg",
+        alt: "Room 2"
+    },
+//   {
+//     src: "/images/room1.jpg",
+//     placeholder: "/images/room1-small.jpg",
+//     alt: "Room 1"
+//   },
+//   {
+//     src: "/images/room2.jpg",
+//     placeholder: "/images/room2-small.jpg",
+//     alt: "Room 2"
+//   },
+  // ... add all hostel photos here
+];
+
+export default function HostelGallery() {
+  const [lightboxIndex, setLightboxIndex] = useState(-1);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold text-center mb-8">Photo Gallery</h1>
+    <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      {images.map((image, index) => {
+        const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
 
-      {/* Grid Layout */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {images.map((img, i) => (
-          <div
-            key={i}
-            className="relative cursor-pointer overflow-hidden rounded-xl shadow-lg group"
-            onClick={() => {
-              setIndex(i);
-              setOpen(true);
-            }}
-          >
-            <img
-              src={img.src}
-              alt={img.alt}
-              className="w-full h-64 object-cover transform group-hover:scale-110 transition duration-300"
-            />
-            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition duration-300" />
+        return (
+          <div ref={ref} key={index}>
+            {inView && (
+              <ProgressiveImage
+                src={image.src}
+                placeholder={image.placeholder}
+                alt={image.alt}
+                onClick={() => setLightboxIndex(index)}
+              />
+            )}
           </div>
-        ))}
-      </div>
+        );
+      })}
 
-      {/* Lightbox */}
       <Lightbox
-        open={open}
-        close={() => setOpen(false)}
-        index={index}
-        slides={images}
-        plugins={[Thumbnails]}
+        open={lightboxIndex >= 0}
+        index={lightboxIndex}
+        close={() => setLightboxIndex(-1)}
+        slides={images.map((img) => ({ src: img.src }))}
       />
     </div>
   );
-};
-
-export default Gallery;
+}
